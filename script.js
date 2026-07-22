@@ -62,7 +62,7 @@ async function loadgallery() {
     });
 
   if (error) {
-    emptymessage.textContent = "the image gallery could not be loaded.";
+    emptymessage.textContent = `gallery error: ${error.message}`;
     return;
   }
 
@@ -80,8 +80,7 @@ async function loadgallery() {
       .from("gallery")
       .getPublicUrl(`images/${file.name}`);
 
-    const imagecard = makeimagecard(file.name, publicurl.publicUrl);
-    imagefeed.append(imagecard);
+    imagefeed.append(makeimagecard(file.name, publicurl.publicUrl));
   }
 }
 
@@ -99,7 +98,7 @@ loginform.addEventListener("submit", async (event) => {
   });
 
   if (error) {
-    loginmessage.textContent = "login failed. check your email and password.";
+    loginmessage.textContent = `login failed: ${error.message}`;
     return;
   }
 
@@ -132,7 +131,7 @@ imageupload.addEventListener("change", async () => {
       });
 
     if (error) {
-      uploadmessage.textContent = "an image could not be uploaded.";
+      uploadmessage.textContent = `upload failed: ${error.message}`;
       return;
     }
   }
