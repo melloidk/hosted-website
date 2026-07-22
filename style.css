@@ -28,7 +28,7 @@ main {
   padding: 110px 24px 40px;
 }
 
-.upload-box {
+.intro {
   margin-bottom: 32px;
   padding: 28px;
   text-align: center;
@@ -37,32 +37,15 @@ main {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
-.upload-box h2 {
+.intro h2 {
   margin: 0;
   color: #5a36c9;
   font-size: 2rem;
 }
 
-.upload-box p {
+.intro p {
+  margin-bottom: 0;
   font-size: 1.1rem;
-}
-
-#image-upload {
-  display: none;
-}
-
-.upload-button {
-  display: inline-block;
-  padding: 12px 22px;
-  border-radius: 10px;
-  background: #5a36c9;
-  color: white;
-  font-size: 1.1rem;
-  cursor: pointer;
-}
-
-.upload-button:hover {
-  background: #43249f;
 }
 
 .image-feed {

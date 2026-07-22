@@ -1,34 +1,40 @@
-const imageupload = document.getElementById("image-upload");
 const imagefeed = document.getElementById("image-feed");
 const emptymessage = document.getElementById("empty-message");
 
-imageupload.addEventListener("change", () => {
-  const files = imageupload.files;
+async function loadimages() {
+  try {
+    const response = await fetch("images.json");
 
-  if (files.length > 0) {
-    emptymessage.style.display = "none";
-  }
-
-  for (const file of files) {
-    if (!file.type.startsWith("image/")) {
-      continue;
+    if (!response.ok) {
+      throw new Error("could not load the image list");
     }
 
-    const imageurl = URL.createObjectURL(file);
+    const images = await response.json();
 
-    const imagecard = document.createElement("article");
-    imagecard.className = "image-card";
+    if (images.length === 0) {
+      return;
+    }
 
-    const image = document.createElement("img");
-    image.src = imageurl;
-    image.alt = file.name;
+    emptymessage.style.display = "none";
 
-    const imagename = document.createElement("p");
-    imagename.textContent = file.name.toLowerCase();
+    for (const filename of images) {
+      const imagecard = document.createElement("article");
+      imagecard.className = "image-card";
 
-    imagecard.append(image, imagename);
-    imagefeed.append(imagecard);
+      const image = document.createElement("img");
+      image.src = `images/${encodeURIComponent(filename)}`;
+      image.alt = filename.toLowerCase();
+      image.loading = "lazy";
+
+      const imagename = document.createElement("p");
+      imagename.textContent = filename.toLowerCase();
+
+      imagecard.append(image, imagename);
+      imagefeed.append(imagecard);
+    }
+  } catch (error) {
+    emptymessage.textContent = "the image gallery could not be loaded.";
   }
+}
 
-  imageupload.value = "";
-});
+loadimages();
