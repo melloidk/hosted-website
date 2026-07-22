@@ -23,7 +23,7 @@ header h1 {
 }
 
 main {
-  max-width: 1000px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 110px 24px 40px;
 }
@@ -50,7 +50,7 @@ main {
 
 .image-feed {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 24px;
   padding-bottom: 40px;
 }
@@ -62,11 +62,21 @@ main {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-.image-card img {
-  display: block;
+.image-frame {
+  display: grid;
   width: 100%;
-  height: 280px;
-  object-fit: cover;
+  max-width: 1000px;
+  aspect-ratio: 1 / 1;
+  place-items: center;
+  margin: 0 auto;
+  background: #e8e8ef;
+}
+
+.image-frame img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
 .image-card p {

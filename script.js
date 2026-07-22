@@ -21,6 +21,9 @@ async function loadimages() {
       const imagecard = document.createElement("article");
       imagecard.className = "image-card";
 
+      const imageframe = document.createElement("div");
+      imageframe.className = "image-frame";
+
       const image = document.createElement("img");
       image.src = `images/${encodeURIComponent(filename)}`;
       image.alt = filename.toLowerCase();
@@ -29,7 +32,8 @@ async function loadimages() {
       const imagename = document.createElement("p");
       imagename.textContent = filename.toLowerCase();
 
-      imagecard.append(image, imagename);
+      imageframe.append(image);
+      imagecard.append(imageframe, imagename);
       imagefeed.append(imagecard);
     }
   } catch (error) {
