@@ -19,6 +19,38 @@
       <p>scroll down to see my uploaded images.</p>
     </section>
 
+    <section class="login-box" id="login-box">
+      <h2>owner login</h2>
+
+      <form id="login-form">
+        <label for="email">email</label>
+        <input id="email" type="email" required>
+
+        <label for="password">password</label>
+        <input id="password" type="password" required>
+
+        <button type="submit">log in</button>
+      </form>
+
+      <p id="login-message"></p>
+    </section>
+
+    <section class="upload-box" id="upload-box" hidden>
+      <p>you are logged in as the owner.</p>
+
+      <label class="upload-button" for="image-upload">
+        upload images
+      </label>
+
+      <input id="image-upload" type="file" accept="image/*" multiple>
+
+      <button class="logout-button" id="logout-button" type="button">
+        log out
+      </button>
+
+      <p id="upload-message"></p>
+    </section>
+
     <section class="image-feed" id="image-feed">
       <p class="empty-message" id="empty-message">
         no images have been added yet.
@@ -26,6 +58,6 @@
     </section>
   </main>
 
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>

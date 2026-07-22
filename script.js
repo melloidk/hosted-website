@@ -1,44 +1,151 @@
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const supabaseurl = "paste-your-project-url-here";
+const supabasekey = "paste-your-publishable-key-here";
+
+const supabase = createClient(supabaseurl, supabasekey);
+
+const loginbox = document.getElementById("login-box");
+const loginform = document.getElementById("login-form");
+const loginmessage = document.getElementById("login-message");
+const uploadbox = document.getElementById("upload-box");
+const imageupload = document.getElementById("image-upload");
+const uploadmessage = document.getElementById("upload-message");
+const logoutbutton = document.getElementById("logout-button");
 const imagefeed = document.getElementById("image-feed");
 const emptymessage = document.getElementById("empty-message");
 
-async function loadimages() {
-  try {
-    const response = await fetch("images.json");
+async function updateownercontrols() {
+  const {
+    data: { session }
+  } = await supabase.auth.getSession();
 
-    if (!response.ok) {
-      throw new Error("could not load the image list");
-    }
+  loginbox.hidden = Boolean(session);
+  uploadbox.hidden = !session;
+}
 
-    const images = await response.json();
+function makeimagecard(filename, imageurl) {
+  const imagecard = document.createElement("article");
+  imagecard.className = "image-card";
 
-    if (images.length === 0) {
-      return;
-    }
+  const imageframe = document.createElement("div");
+  imageframe.className = "image-frame";
 
-    emptymessage.style.display = "none";
+  const image = document.createElement("img");
+  image.src = imageurl;
+  image.alt = filename.toLowerCase();
+  image.loading = "lazy";
 
-    for (const filename of images) {
-      const imagecard = document.createElement("article");
-      imagecard.className = "image-card";
+  const imagename = document.createElement("p");
+  imagename.textContent = filename.toLowerCase();
 
-      const imageframe = document.createElement("div");
-      imageframe.className = "image-frame";
+  imageframe.append(image);
+  imagecard.append(imageframe, imagename);
 
-      const image = document.createElement("img");
-      image.src = `images/${encodeURIComponent(filename)}`;
-      image.alt = filename.toLowerCase();
-      image.loading = "lazy";
+  return imagecard;
+}
 
-      const imagename = document.createElement("p");
-      imagename.textContent = filename.toLowerCase();
+async function loadgallery() {
+  imagefeed.innerHTML = "";
+  imagefeed.append(emptymessage);
+  emptymessage.style.display = "block";
+  emptymessage.textContent = "loading images...";
 
-      imageframe.append(image);
-      imagecard.append(imageframe, imagename);
-      imagefeed.append(imagecard);
-    }
-  } catch (error) {
+  const { data: files, error } = await supabase.storage
+    .from("gallery")
+    .list("images", {
+      limit: 100,
+      sortBy: {
+        column: "created_at",
+        order: "desc"
+      }
+    });
+
+  if (error) {
     emptymessage.textContent = "the image gallery could not be loaded.";
+    return;
+  }
+
+  const imagefiles = files.filter((file) => file.name !== ".emptyfolderplaceholder");
+
+  if (imagefiles.length === 0) {
+    emptymessage.textContent = "no images have been added yet.";
+    return;
+  }
+
+  emptymessage.style.display = "none";
+
+  for (const file of imagefiles) {
+    const { data: publicurl } = supabase.storage
+      .from("gallery")
+      .getPublicUrl(`images/${file.name}`);
+
+    const imagecard = makeimagecard(file.name, publicurl.publicUrl);
+    imagefeed.append(imagecard);
   }
 }
 
-loadimages();
+loginform.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  loginmessage.textContent = "logging in...";
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    loginmessage.textContent = "login failed. check your email and password.";
+    return;
+  }
+
+  loginmessage.textContent = "";
+  await updateownercontrols();
+});
+
+imageupload.addEventListener("change", async () => {
+  const files = imageupload.files;
+
+  if (files.length === 0) {
+    return;
+  }
+
+  uploadmessage.textContent = "uploading images...";
+
+  for (const file of files) {
+    if (!file.type.startsWith("image/")) {
+      continue;
+    }
+
+    const cleanname = file.name.replaceAll("/", "-");
+    const filename = `${crypto.randomUUID()}-${cleanname}`;
+
+    const { error } = await supabase.storage
+      .from("gallery")
+      .upload(`images/${filename}`, file, {
+        contentType: file.type,
+        upsert: false
+      });
+
+    if (error) {
+      uploadmessage.textContent = "an image could not be uploaded.";
+      return;
+    }
+  }
+
+  imageupload.value = "";
+  uploadmessage.textContent = "your images were uploaded.";
+  await loadgallery();
+});
+
+logoutbutton.addEventListener("click", async () => {
+  await supabase.auth.signOut();
+  await updateownercontrols();
+});
+
+await updateownercontrols();
+await loadgallery();
