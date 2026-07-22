@@ -14,7 +14,7 @@ imageupload.addEventListener("change", () => {
       continue;
     }
 
-    const imageurl = url.createObjectURL(file);
+    const imageurl = URL.createObjectURL(file);
 
     const imagecard = document.createElement("article");
     imagecard.className = "image-card";
