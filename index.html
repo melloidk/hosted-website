@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>mellow's hosted image website</title>
 
@@ -14,9 +14,22 @@
   </header>
 
   <main>
-    <h2>Welcome!</h2>
-    <p>This is my hosted website.</p>
-    <button id="helloButton">Click me!</button>
+    <section class="upload-box">
+      <h2>upload images</h2>
+      <p>choose one or more images from your computer.</p>
+
+      <label class="upload-button" for="image-upload">
+        choose images
+      </label>
+
+      <input id="image-upload" type="file" accept="image/*" multiple>
+    </section>
+
+    <section class="image-feed" id="image-feed">
+      <p class="empty-message" id="empty-message">
+        your uploaded images will appear here.
+      </p>
+    </section>
   </main>
 
   <script src="script.js"></script>

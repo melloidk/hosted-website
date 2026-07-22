@@ -2,13 +2,19 @@ body {
   margin: 0;
   min-height: 100vh;
   background: #f3f6ff;
-  font-family: "ComicNeueSansID", sans-serif;
+  font-family: "comicneuesansid", sans-serif;
 }
 
 header {
-  padding: 20px 32px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 18px 24px;
   background: #5a36c9;
   color: white;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
 }
 
 header h1 {
@@ -17,38 +23,83 @@ header h1 {
 }
 
 main {
-  max-width: 500px;
-  margin: 80px auto;
-  padding: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 110px 24px 40px;
+}
+
+.upload-box {
+  margin-bottom: 32px;
+  padding: 28px;
   text-align: center;
   background: white;
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
-h2 {
-  margin-top: 0;
-  font-size: 2.5rem;
+.upload-box h2 {
+  margin: 0;
   color: #5a36c9;
+  font-size: 2rem;
 }
 
-p {
-  font-size: 1.2rem;
-  line-height: 1.5;
+.upload-box p {
+  font-size: 1.1rem;
 }
 
-button {
-  margin-top: 16px;
-  padding: 12px 20px;
-  border: 0;
+#image-upload {
+  display: none;
+}
+
+.upload-button {
+  display: inline-block;
+  padding: 12px 22px;
   border-radius: 10px;
   background: #5a36c9;
   color: white;
-  font-family: inherit;
-  font-size: 1rem;
+  font-size: 1.1rem;
   cursor: pointer;
 }
 
-button:hover {
+.upload-button:hover {
   background: #43249f;
+}
+
+.image-feed {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  padding-bottom: 40px;
+}
+
+.image-card {
+  overflow: hidden;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.image-card img {
+  display: block;
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+}
+
+.image-card p {
+  margin: 0;
+  padding: 14px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.empty-message {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 40px;
+  text-align: center;
+  background: white;
+  border-radius: 18px;
+  font-size: 1.2rem;
+  color: #5a36c9;
 }
